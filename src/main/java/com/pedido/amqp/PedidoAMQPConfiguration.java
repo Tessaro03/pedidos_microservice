@@ -3,6 +3,9 @@ package com.pedido.amqp;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -33,6 +36,23 @@ public class PedidoAMQPConfiguration {
     public Queue criaFilaPedidoCancelado(){ 
         return QueueBuilder.nonDurable("pedido.cancelado").build(); 
     }
+
+    @Bean
+    public Queue criaFilaPagamentoConfirmadoPedido(){ 
+        return QueueBuilder.nonDurable("pagamento.confirmado-pedido").build(); 
+    }
+
+     @Bean 
+    public FanoutExchange fanoutExchange() {     
+        return new FanoutExchange("pagamento.ex"); 
+    }  
+
+
+    @Bean
+    public Binding bindingPagamentoPedido(){
+        return BindingBuilder.bind(criaFilaPagamentoConfirmadoPedido()).to(fanoutExchange());
+    }
+    
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter messageConverter){

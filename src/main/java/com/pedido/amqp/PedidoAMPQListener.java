@@ -10,11 +10,11 @@ import com.pedido.service.PedidoService;
 public class PedidoAMPQListener {
 
     @Autowired
-    private PedidoService pedidoService;
+    private PedidoService service;
 
-    @RabbitListener(queues = "pagamento.concluido") 
+    @RabbitListener(queues="pagamento.confirmado-pedido") 
     public void pagamentoConcluido(Long idPedido) { 
-        pedidoService.confirmarPedido(idPedido);
+        service.pagamentoConfirmado(idPedido);
     } 
 
     

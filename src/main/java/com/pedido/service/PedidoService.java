@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pedido.dtos.PagamentoInputDTO;
 import com.pedido.dtos.PedidoInputDTO;
@@ -61,8 +62,8 @@ public class PedidoService {
         repository.save(pedido);
     }
     
+    @Transactional
     public void pagamentoConfirmado(Long idPedido) {
-        validador.validarPatch(idPedido);
         var pedido = repository.getReferenceById(idPedido);
         pedido.setStatus(Status.PAGO);
         repository.save(pedido);

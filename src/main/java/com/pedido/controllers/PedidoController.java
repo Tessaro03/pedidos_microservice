@@ -49,7 +49,7 @@ public class PedidoController {
         service.pagamentoConfirmado(idPedido);
     }
 
-    @DeleteMapping("{idPedido}")
+    @DeleteMapping("/{idPedido}")
     public void cancelarPedido(@PathVariable long idPedido){
         service.cancelarPedido(idPedido);
     }
