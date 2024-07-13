@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pedido.dtos.PedidoInputDTO;
+import com.pedido.dtos.pedidoProduto.output.PedidoProdutosOutputDTO;
 import com.pedido.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class PedidoController {
 
     @PostMapping
     @Operation(summary = "Criar Pedido", description = "Cria o pedido")
-    public void criarPedido(@RequestBody @Valid PedidoInputDTO pedido){
+    public void criarPedido(@RequestBody @Valid PedidoProdutosOutputDTO pedido){
         service.criar(pedido);
     }
 

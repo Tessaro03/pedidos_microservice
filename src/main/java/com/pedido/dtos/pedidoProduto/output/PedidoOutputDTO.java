@@ -1,9 +1,10 @@
-package com.pedido.dtos;
+package com.pedido.dtos.pedidoProduto.output;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.pedido.dtos.pedidoProduto.input.ProdutoCompletoDTO;
 import com.pedido.model.Pedido;
 import com.pedido.model.Status;
 
@@ -11,12 +12,13 @@ public record PedidoOutputDTO(
     Long id,
     LocalDateTime dataHora,
     Status status,
-    List<ItemOutputDTO> itens
+
+    List<ProdutoCompletoDTO> produtos
 ) {
     
     public PedidoOutputDTO(Pedido pedido){
         this(pedido.getId(), pedido.getDataHora(), pedido.getStatus(),
-             pedido.getItens().stream().map(ItemOutputDTO::new).collect(Collectors.toList()));
+         pedido.getProdutos().stream().map(ProdutoCompletoDTO::new).collect(Collectors.toList()));
     }
 
 }

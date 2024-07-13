@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pedido.dtos.PagamentoInputDTO;
-import com.pedido.dtos.PedidoInputDTO;
-import com.pedido.dtos.PedidoOutputDTO;
+import com.pedido.dtos.pedidoProduto.output.PedidoOutputDTO;
+import com.pedido.dtos.pedidoProduto.output.PedidoProdutosOutputDTO;
 import com.pedido.model.Pedido;
 import com.pedido.model.Status;
 import com.pedido.repository.PedidoRepository;
@@ -38,9 +38,17 @@ public class PedidoService {
         return pedidos.stream().map(PedidoOutputDTO::new).collect(Collectors.toList());
     }
 
-    public void criar(@Valid PedidoInputDTO dados) {
+    public void criar(@Valid PedidoProdutosOutputDTO dados) {
         var pedido = new Pedido(dados);
         repository.save(pedido);
+
+        
+
+        /* ENVIAR MENSAGEM PARA PRODUTOS ENVIANDO OS DADOS (PedidoProdutosOutputDTO dados) */
+        /* RECEBER PEDIDO ENVIADO COM O PEDIDO COMPLETO */
+        /* SALVAR TODOS PRODUTOS */
+
+
     }
 
     public void confirmarPedido(Long idPedido) {

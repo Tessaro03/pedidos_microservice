@@ -1,7 +1,7 @@
 package com.pedido.model;
 
 public enum Status {
-    REALIZANDO,
+    PENDENTE,
     CANCELADO,
     PAGO,
     NAO_AUTORIZADO,
