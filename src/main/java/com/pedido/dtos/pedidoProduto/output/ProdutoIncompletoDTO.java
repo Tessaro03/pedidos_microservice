@@ -1,5 +1,7 @@
 package com.pedido.dtos.pedidoProduto.output;
 
+import com.pedido.model.Produto;
+
 import jakarta.validation.constraints.NotNull;
 
 public record ProdutoIncompletoDTO(
@@ -13,6 +15,8 @@ public record ProdutoIncompletoDTO(
     String observacao
 ) {
 
-     
+    public ProdutoIncompletoDTO(Produto produto){
+        this(produto.getIdProduto(), produto.getQuantidade(), produto.getObservacao());
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.pedido.controllers;
 
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pedido.dtos.pedidoProduto.output.PedidoProdutosOutputDTO;
+import com.pedido.dtos.pedidoProduto.input.PedidoInput;
 import com.pedido.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,8 +38,8 @@ public class PedidoController {
 
     @PostMapping
     @Operation(summary = "Criar Pedido", description = "Cria o pedido")
-    public void criarPedido(@RequestBody @Valid PedidoProdutosOutputDTO pedido){
-        service.criar(pedido);
+    public void criarPedido(@RequestBody @Valid PedidoInput pedido){
+        service.enviarSeparacao(pedido);
     }
 
     @PatchMapping("/{idPedido}/confirmado")
@@ -48,9 +49,10 @@ public class PedidoController {
     }
 
     @DeleteMapping("/{idPedido}")
-    @Operation(summary = "Deleta Pedido", description = "Deleta o pedido e envia msg para pagamentos cancelar o pagamento")
+    @Operation(summary = "Deleta Pedido", description = "Deleta o pedido e envia msg para pagamentos cancelar o pagamento e para produtos ajustar o estoque")
     public void cancelarPedido(@PathVariable long idPedido){
         service.cancelarPedido(idPedido);
     }
+
 
 }

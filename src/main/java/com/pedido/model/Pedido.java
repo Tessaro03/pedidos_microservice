@@ -3,10 +3,11 @@ package com.pedido.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.pedido.dtos.pedidoProduto.output.PedidoProdutosOutputDTO;
+import com.pedido.dtos.pedidoProduto.input.PedidoInput;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,8 +27,8 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 public class Pedido {
 
-    public Pedido(@Valid PedidoProdutosOutputDTO dados){
-        this.nomeCliente = dados.nomeCliente();
+    public Pedido(@Valid PedidoInput dados){
+        this.nomeCliente = "usuario";
         this.dataHora = LocalDateTime.now();
         this.status = Status.PENDENTE;
     }
@@ -45,8 +46,19 @@ public class Pedido {
     @Enumerated
     private Status status;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Produto> produtos;
+
+    
+    public void adicionarProdutos(List<Produto> produtos) {
+        this.setProdutos(produtos);
+        this.valorTotal(produtos);
+        this.setStatus(Status.SEPARADO);
+    }
+    public void valorTotal(List<Produto> produtos) {
+        var valorTotalPedido = produtos.stream().mapToDouble(Produto::getValorTotal).sum();
+        this.setValorPedido(valorTotalPedido);
+    }
   
 
 

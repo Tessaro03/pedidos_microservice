@@ -6,7 +6,7 @@ public enum Status {
     PAGO,
     NAO_AUTORIZADO,
     CONFIRMADO,
-    PRONTO,
+    SEPARADO,
     SAIU_PARA_ENTREGA,
     ENTREGUE
 }
