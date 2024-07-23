@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pedido.dtos.PagamentoInputDTO;
+import com.pedido.dtos.pedidoProduto.avaliacao.PedidoAvaliacaoDTO;
 import com.pedido.dtos.pedidoProduto.input.PedidoCompletoInputDTO;
 import com.pedido.dtos.pedidoProduto.input.PedidoInput;
 import com.pedido.dtos.pedidoProduto.input.PedidoSolicitacaoInputDTO;
@@ -90,10 +91,16 @@ public class PedidoService {
     @Transactional
     public void pagamentoConfirmado(Long idPedido) {
         var pedido = repository.getReferenceById(idPedido);
-        pedido.setStatus(Status.PAGO);
+        pedido.setStatus(Status.PAGO); 
+        repository.save(pedido);
+        entregaPedido(idPedido);
+    }    
+
+    public void entregaPedido(Long idPedido){
+        var pedido = repository.getReferenceById(idPedido);
+        pedido.setStatus(Status.ENTREGUE); 
+        rabbitTemplate.convertAndSend("pedido.entregue",new PedidoAvaliacaoDTO(pedido));
         repository.save(pedido);
     }
-
-    
 }
 

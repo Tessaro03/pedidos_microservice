@@ -63,7 +63,10 @@ public class PedidoAMQPConfiguration {
         return BindingBuilder.bind(criaFilaPagamentoConfirmadoPedido()).to(fanoutExchange());
     }
 
-   
+    @Bean
+    public Queue criaFilaPagamentoPedidoEntregue(){ 
+        return QueueBuilder.nonDurable("pedido.entregue").build(); 
+    }
 
 
     @Bean
