@@ -68,6 +68,10 @@ public class PedidoAMQPConfiguration {
         return QueueBuilder.nonDurable("pedido.entregue").build(); 
     }
 
+    @Bean
+    public Queue criaFilaProdutoSeparado(){ 
+        return QueueBuilder.nonDurable("produto.separado").build(); 
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter messageConverter){
