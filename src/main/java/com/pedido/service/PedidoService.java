@@ -73,6 +73,7 @@ public class PedidoService {
         repository.save(pedido);
     }
     
+    @Transactional
     public void cancelarPedido(long idPedido) {
         validador.validarDelete(idPedido);
         var pedido = repository.getReferenceById(idPedido);
