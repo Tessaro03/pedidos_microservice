@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pedido.dtos.pedidoProduto.input.PedidoCompletoInputDTO;
+import com.pedido.dtos.pedidoProduto.input.PedidoSolicitacaoInputDTO;
 import com.pedido.service.PedidoService;
 
 @Service
@@ -23,4 +24,9 @@ public class PedidoAMQPListener {
         service.pedidoSeparado(pedido);
     }
     
+    @RabbitListener(queues="pedido.separado-dlq")
+    public void pedidoSeparado(PedidoSolicitacaoInputDTO pedido){
+        service.cancelarPedido(pedido.idPedido());
+    }
+
 }

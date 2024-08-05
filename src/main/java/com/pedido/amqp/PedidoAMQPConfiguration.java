@@ -2,6 +2,7 @@ package com.pedido.amqp;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
@@ -30,7 +31,32 @@ public class PedidoAMQPConfiguration {
     // Solicitar pedido completo para produtos
     @Bean
     public Queue criaFilaSolicitacaoProdutos(){ 
-        return QueueBuilder.nonDurable("pedido.solicitado").build(); 
+        return QueueBuilder
+            .nonDurable("pedido.solicitado")
+            .deadLetterExchange("pedido.dlx")
+            .withArgument("x-message-ttl", 3000) // 03 segundos
+            .build(); 
+    }
+
+    @Bean
+    public FanoutExchange deadLetterExchangeProduto() {
+        return ExchangeBuilder
+            .fanoutExchange("pedido.dlx")
+            .build();
+    }
+
+    @Bean
+    public Queue filaDlqProdutoSeparado() {
+    return QueueBuilder
+            .nonDurable("pedido.separado-dlq")
+            .build();
+    }
+
+    @Bean
+    public Binding bindDlxPedidoSeparado() {
+        return BindingBuilder
+                .bind(filaDlqProdutoSeparado())
+                .to(deadLetterExchangeProduto());
     }
 
     // Enviar msg para pagamento informando que pedido foi concluido
@@ -70,7 +96,9 @@ public class PedidoAMQPConfiguration {
 
     @Bean
     public Queue criaFilaProdutoSeparado(){ 
-        return QueueBuilder.nonDurable("produto.separado").build(); 
+        return QueueBuilder
+            .nonDurable("produto.separado")
+            .build(); 
     }
 
     @Bean
