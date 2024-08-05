@@ -15,7 +15,7 @@ public record ProdutoCompletoDTO(
 ) {
 
     public ProdutoCompletoDTO(Produto produto){
-        this(produto.getId(), produto.getIdLoja(), produto.getNomeProduto(),
+        this(produto.getIdProduto(), produto.getIdLoja(), produto.getNomeProduto(),
          produto.getValor(), produto.getQuantidade(), produto.getObservacao());
     }
 }
