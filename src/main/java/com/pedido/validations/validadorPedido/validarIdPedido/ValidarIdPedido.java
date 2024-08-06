@@ -1,4 +1,4 @@
-package com.pedido.validations.validarIdPedido;
+package com.pedido.validations.validadorPedido.validarIdPedido;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

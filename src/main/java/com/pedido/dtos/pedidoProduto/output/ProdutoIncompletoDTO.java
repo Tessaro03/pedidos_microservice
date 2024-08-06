@@ -2,6 +2,7 @@ package com.pedido.dtos.pedidoProduto.output;
 
 import com.pedido.model.Produto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record ProdutoIncompletoDTO(
@@ -10,6 +11,7 @@ public record ProdutoIncompletoDTO(
     Long id,
 
     @NotNull
+    @Min(1)
     Integer quantidade,
 
     String observacao
