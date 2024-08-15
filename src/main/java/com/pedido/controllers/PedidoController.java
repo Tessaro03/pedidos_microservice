@@ -38,8 +38,8 @@ public class PedidoController {
 
     @PostMapping
     @Operation(summary = "Criar Pedido", description = "Cria o pedido")
-    public void criarPedido(@RequestBody @Valid PedidoInput pedido){
-        service.enviarSeparacao(pedido);
+    public void criarPedido(@RequestBody @Valid PedidoInput pedido, HttpServletRequest request){
+        service.enviarSeparacao(pedido, request);
     }
 
     @PatchMapping("/{idPedido}/confirmado")

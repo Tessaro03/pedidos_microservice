@@ -16,6 +16,7 @@ import com.pedido.dtos.pedidoProduto.input.PedidoSolicitacaoInputDTO;
 import com.pedido.dtos.pedidoProduto.output.PedidoOutputDTO;
 import com.pedido.dtos.pedidoProduto.output.ProdutoIncompletoDTO;
 import com.pedido.infra.security.TokenService;
+import com.pedido.infra.security.UsuarioDTO;
 import com.pedido.model.Pedido;
 import com.pedido.model.Produto;
 import com.pedido.model.Status;
@@ -58,10 +59,10 @@ public class PedidoService {
         
     }
 
-    public void enviarSeparacao(PedidoInput dados) {
-        var pedido = new Pedido(dados);
+    public void enviarSeparacao(PedidoInput dados, HttpServletRequest request) {
+        var usuario = tokenService.extrairInformacoes(request);
+        var pedido = new Pedido(dados, usuario);
         repository.save(pedido);
-        
         var pedidoComId = new PedidoSolicitacaoInputDTO(pedido.getId(), dados);
         rabbitTemplate.convertAndSend("pedido.solicitado", pedidoComId);
     }
