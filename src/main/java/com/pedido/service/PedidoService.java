@@ -78,8 +78,10 @@ public class PedidoService {
         }
     }
    
-    public void confirmarPedido(Long idPedido) {
-        validador.validarPatch(idPedido);
+    public void confirmarPedido(Long idPedido, HttpServletRequest request) {
+        var usuario = tokenService.extrairInformacoes(request);
+
+        validador.validarPatch(idPedido, usuario.id());
         var pedido = repository.getReferenceById(idPedido);
         var pagamentoDTO = new PagamentoInputDTO(pedido.getIdCliente(), pedido.getValorPedido(), pedido.getId());
         rabbitTemplate.convertAndSend("pedido.concluido", pagamentoDTO);
@@ -88,8 +90,10 @@ public class PedidoService {
     }
     
     @Transactional
-    public void cancelarPedido(long idPedido) {
-        validador.validarDelete(idPedido);
+    public void cancelarPedido(long idPedido, HttpServletRequest request) {
+        var usuario = tokenService.extrairInformacoes(request);
+
+        validador.validarDelete(idPedido, usuario.id());
         var pedido = repository.getReferenceById(idPedido);
         
         if (pedido.getStatus() == Status.SEPARADO | pedido.getStatus() == Status.CONFIRMADO ) {
@@ -116,6 +120,11 @@ public class PedidoService {
         pedido.setStatus(Status.ENTREGUE); 
         rabbitTemplate.convertAndSend("pedido.entregue",new PedidoAvaliacaoDTO(pedido));
         repository.save(pedido);
+    }
+
+    @Transactional
+    public void cancelarPedido(Long idPedido) {
+        repository.deleteById(idPedido);
     }
 }
 

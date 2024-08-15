@@ -44,14 +44,14 @@ public class PedidoController {
 
     @PatchMapping("/{idPedido}/confirmado")
     @Operation(summary = "Confirmar Pedido", description = "Confirma o pedido e envia msg para pagamentos criar um pagamento")
-    public void confirmarPedido(@PathVariable Long idPedido){
-        service.confirmarPedido(idPedido);
+    public void confirmarPedido(@PathVariable Long idPedido,  HttpServletRequest request){
+        service.confirmarPedido(idPedido, request);
     }
 
     @DeleteMapping("/{idPedido}")
     @Operation(summary = "Deleta Pedido", description = "Deleta o pedido e envia msg para pagamentos cancelar o pagamento e para produtos ajustar o estoque")
-    public void cancelarPedido(@PathVariable long idPedido){
-        service.cancelarPedido(idPedido);
+    public void cancelarPedido(@PathVariable long idPedido, HttpServletRequest request){
+        service.cancelarPedido(idPedido, request);
     }
 
 

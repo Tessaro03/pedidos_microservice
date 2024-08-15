@@ -13,7 +13,6 @@ public class ValidandoSePedidoJaFoiPago implements ValidadorDeletePedido{
     @Autowired
     private PedidoRepository repository;
 
-
     public void validar(Long idPedido) {
         var pedido = repository.getReferenceById(idPedido);
         if (pedido.getStatus() == Status.PAGO) {

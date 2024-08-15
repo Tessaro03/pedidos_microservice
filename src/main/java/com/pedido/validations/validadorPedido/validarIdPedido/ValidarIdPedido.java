@@ -17,8 +17,18 @@ public class ValidarIdPedido {
         if (!repository.existsById(id)) {
             throw new ValidacaoException("Id do pedido não existe"); 
         }
-
     }
 
+    public void validarSePedidoEDeUsuario(Long idPedido, Long idUsuario){
+        
+        var pedido = repository.getReferenceById(idPedido);
+        System.out.println(pedido.getIdCliente());
+        System.out.println(idUsuario);
+
+
+        if (!pedido.getIdCliente().equals(idUsuario)) {
+            throw new ValidacaoException("Pedido não pertence ao usuário"); 
+        }
+    }
 
 }

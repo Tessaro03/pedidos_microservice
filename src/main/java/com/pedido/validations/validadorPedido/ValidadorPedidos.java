@@ -21,13 +21,15 @@ public class ValidadorPedidos {
     @Autowired
     private List<ValidadorPatchPedido> validadorPatch;
     
-    public void validarPatch(Long idPedido){
+    public void validarPatch(Long idPedido, Long idUsuario){
         validarId.validarId(idPedido);
+        validarId.validarSePedidoEDeUsuario(idPedido, idUsuario);
         validadorPatch.forEach(v -> v.validar(idPedido));
     }
 
-    public void validarDelete(Long idPedido){
+    public void validarDelete(Long idPedido, Long idUsuario){
         validarId.validarId(idPedido);
+        validarId.validarSePedidoEDeUsuario(idPedido, idUsuario);
         validadorDelete.forEach(v -> v.validar(idPedido));
     }
 
