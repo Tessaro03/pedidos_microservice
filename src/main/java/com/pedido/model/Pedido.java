@@ -28,7 +28,6 @@ import lombok.Setter;
 public class Pedido {
 
     public Pedido(@Valid PedidoInput dados){
-        this.nomeCliente = "usuario";
         this.dataHora = LocalDateTime.now();
         this.status = Status.PENDENTE;
     }
@@ -37,12 +36,17 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
+    
+    private Long idCliente;
+    
+    private Long idLoja;
+    
     private Double valorPedido;
-
-    private String nomeCliente;
-
+    
     private LocalDateTime dataHora;
-
+    
     @Enumerated
     private Status status;
 

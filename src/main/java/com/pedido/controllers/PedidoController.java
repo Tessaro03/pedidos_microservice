@@ -16,6 +16,7 @@ import com.pedido.dtos.pedidoProduto.input.PedidoInput;
 import com.pedido.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 
@@ -30,8 +31,8 @@ public class PedidoController {
     
     @GetMapping
     @Operation(summary = "Ver Pedidos", description = "Retorna os pedidos criados")
-    public ResponseEntity verPedidos(){
-        return ResponseEntity.ok().body(service.verPedidos());
+    public ResponseEntity verPedidos(HttpServletRequest request){
+        return ResponseEntity.ok().body(service.verPedidos(request));
     }
 
 

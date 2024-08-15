@@ -15,12 +15,15 @@ import com.pedido.dtos.pedidoProduto.input.PedidoInput;
 import com.pedido.dtos.pedidoProduto.input.PedidoSolicitacaoInputDTO;
 import com.pedido.dtos.pedidoProduto.output.PedidoOutputDTO;
 import com.pedido.dtos.pedidoProduto.output.ProdutoIncompletoDTO;
+import com.pedido.infra.security.TokenService;
 import com.pedido.model.Pedido;
 import com.pedido.model.Produto;
 import com.pedido.model.Status;
 import com.pedido.repository.PedidoRepository;
 import com.pedido.repository.ProdutoRepository;
 import com.pedido.validations.validadorPedido.ValidadorPedidos;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -40,12 +43,22 @@ public class PedidoService {
     @Autowired
     private ValidadorPedidos validador;
 
-    public List<PedidoOutputDTO> verPedidos(){
-        var pedidos = repository.findAll();
+    @Autowired
+    private TokenService tokenService;
+
+    public List<PedidoOutputDTO> verPedidos(HttpServletRequest request){
+        var usuario = tokenService.extrairInformacoes(request);
+        List<Pedido> pedidos;
+        if (usuario.tipo().equals("Cliente")) {
+              pedidos = repository.findAllByIdCliente(usuario.id());
+        } else {
+            pedidos = repository.findAllByIdLoja(usuario.id());
+        }
         return pedidos.stream().map(PedidoOutputDTO::new).collect(Collectors.toList());
+        
     }
 
-    public void enviarSeparacao( PedidoInput dados) {
+    public void enviarSeparacao(PedidoInput dados) {
         var pedido = new Pedido(dados);
         repository.save(pedido);
         
@@ -67,7 +80,7 @@ public class PedidoService {
     public void confirmarPedido(Long idPedido) {
         validador.validarPatch(idPedido);
         var pedido = repository.getReferenceById(idPedido);
-        var pagamentoDTO = new PagamentoInputDTO(pedido.getNomeCliente(), pedido.getValorPedido(), pedido.getId());
+        var pagamentoDTO = new PagamentoInputDTO(pedido.getIdCliente(), pedido.getValorPedido(), pedido.getId());
         rabbitTemplate.convertAndSend("pedido.concluido", pagamentoDTO);
         pedido.setStatus(Status.CONFIRMADO);
         repository.save(pedido);
