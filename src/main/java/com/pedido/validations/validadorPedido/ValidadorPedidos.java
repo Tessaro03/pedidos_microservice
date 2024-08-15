@@ -14,25 +14,21 @@ public class ValidadorPedidos {
     
     @Autowired
     private ValidarIdPedido validarId;
-    
-    @Autowired
-    private List<ValidadorPatchPedido> validadorPatch;
 
     @Autowired
     private List<ValidadorDeletePedido> validadorDelete;
 
+    @Autowired
+    private List<ValidadorPatchPedido> validadorPatch;
+    
     public void validarPatch(Long idPedido){
         validarId.validarId(idPedido);
         validadorPatch.forEach(v -> v.validar(idPedido));
-
     }
 
     public void validarDelete(Long idPedido){
         validarId.validarId(idPedido);
         validadorDelete.forEach(v -> v.validar(idPedido));
-
     }
- 
-
 
 }
