@@ -16,7 +16,6 @@ import com.pedido.dtos.pedidoProduto.input.PedidoSolicitacaoInputDTO;
 import com.pedido.dtos.pedidoProduto.output.PedidoOutputDTO;
 import com.pedido.dtos.pedidoProduto.output.ProdutoIncompletoDTO;
 import com.pedido.infra.security.TokenService;
-import com.pedido.infra.security.UsuarioDTO;
 import com.pedido.model.Pedido;
 import com.pedido.model.Produto;
 import com.pedido.model.Status;
@@ -61,27 +60,25 @@ public class PedidoService {
 
     public void enviarSeparacao(PedidoInput dados, HttpServletRequest request) {
         var usuario = tokenService.extrairInformacoes(request);
-        var pedido = new Pedido(dados, usuario);
-        repository.save(pedido);
-        var pedidoComId = new PedidoSolicitacaoInputDTO(pedido.getId(), dados);
-        rabbitTemplate.convertAndSend("pedido.solicitado", pedidoComId);
+
+        var pedido = new PedidoSolicitacaoInputDTO(usuario.id(), dados);
+        rabbitTemplate.convertAndSend("pedido.solicitado", pedido);
     }
     
     public void pedidoSeparado( PedidoCompletoInputDTO dto) {
-        var pedido = repository.findById(dto.idPedido());
+        var pedido = new Pedido(dto);
+
         var produtos = dto.produtos().stream().map(Produto::new).collect(Collectors.toList());
         produtoRepository.saveAll(produtos);
 
-        if (pedido.isPresent()) {
-            pedido.get().adicionarProdutos(produtos);
-            repository.save(pedido.get());
-        }
+        pedido.adicionarProdutos(produtos);
+        repository.save(pedido);
     }
    
     public void confirmarPedido(Long idPedido, HttpServletRequest request) {
         var usuario = tokenService.extrairInformacoes(request);
-
         validador.validarPatch(idPedido, usuario.id());
+
         var pedido = repository.getReferenceById(idPedido);
         var pagamentoDTO = new PagamentoInputDTO(pedido.getIdCliente(), pedido.getValorPedido(), pedido.getId());
         rabbitTemplate.convertAndSend("pedido.concluido", pagamentoDTO);

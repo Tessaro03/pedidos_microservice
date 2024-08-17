@@ -6,7 +6,7 @@ import java.util.List;
 
 public record PedidoCompletoInputDTO(
     
-    Long idPedido,
+    Long idCliente,
 
     List<ProdutoCompletoDTO> produtos
 

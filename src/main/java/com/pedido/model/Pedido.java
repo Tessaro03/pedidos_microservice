@@ -3,8 +3,7 @@ package com.pedido.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.pedido.dtos.pedidoProduto.input.PedidoInput;
-import com.pedido.infra.security.UsuarioDTO;
+import com.pedido.dtos.pedidoProduto.input.PedidoCompletoInputDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -14,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,19 +26,18 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 public class Pedido {
 
-    public Pedido(@Valid PedidoInput dados, UsuarioDTO dto){
-        this.idCliente = dto.id();
+    public Pedido(PedidoCompletoInputDTO dto) {
+        this.idCliente = dto.idCliente();
+        this.idLoja = dto.produtos().get(0).idLoja();
         this.dataHora = LocalDateTime.now();
-        this.status = Status.PENDENTE;
-    }
+        this.status = Status.PENDENTE;  
+     }
+    
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
-    
     private Long idCliente;
     
     private Long idLoja;

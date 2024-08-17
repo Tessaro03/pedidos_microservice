@@ -8,15 +8,15 @@ import com.pedido.dtos.pedidoProduto.output.ProdutoIncompletoDTO;
 
 public record PedidoSolicitacaoInputDTO(
     
-    Long idPedido,
+    Long idCliente,
 
     List<ProdutoIncompletoDTO> produtos
 
 
 ) {
 
-    public PedidoSolicitacaoInputDTO(Long idPedido, PedidoInput produtosIncompleto){
-        this(idPedido, produtosIncompleto.produtos());
+    public PedidoSolicitacaoInputDTO(Long idCliente ,PedidoInput produtosIncompleto){
+        this(idCliente, produtosIncompleto.produtos());
     }
     
    

@@ -22,8 +22,7 @@ public class ValidarIdPedido {
     public void validarSePedidoEDeUsuario(Long idPedido, Long idUsuario){
         
         var pedido = repository.getReferenceById(idPedido);
-        System.out.println(pedido.getIdCliente());
-        System.out.println(idUsuario);
+        
 
 
         if (!pedido.getIdCliente().equals(idUsuario)) {
