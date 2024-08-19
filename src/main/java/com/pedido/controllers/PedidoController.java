@@ -35,7 +35,6 @@ public class PedidoController {
         return ResponseEntity.ok().body(service.verPedidos(request));
     }
 
-
     @PostMapping
     @Operation(summary = "Criar Pedido", description = "Cria o pedido")
     public void criarPedido(@RequestBody @Valid PedidoInput pedido, HttpServletRequest request){
@@ -53,6 +52,4 @@ public class PedidoController {
     public void cancelarPedido(@PathVariable long idPedido, HttpServletRequest request){
         service.cancelarPedido(idPedido, request);
     }
-
-
 }

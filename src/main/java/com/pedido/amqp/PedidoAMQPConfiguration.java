@@ -64,9 +64,7 @@ public class PedidoAMQPConfiguration {
 
     @Bean
     public Queue criaFilaProdutoSeparado(){ 
-        return QueueBuilder
-            .nonDurable("produto.separado")
-            .build(); 
+        return QueueBuilder.nonDurable("produto.separado").build(); 
     }
 
     @Bean
