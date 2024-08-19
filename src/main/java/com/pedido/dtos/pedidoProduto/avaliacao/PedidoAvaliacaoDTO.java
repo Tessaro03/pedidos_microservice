@@ -13,13 +13,16 @@ public record PedidoAvaliacaoDTO(
     @NotNull
     Long idPedido,
 
+   @NotNull
+   Long idCliente,
+
     @NotBlank
     List<ProdutoAvaliacaoDTO> produtos
 
 ) {
 
     public PedidoAvaliacaoDTO(Pedido pedido) {
-        this(pedido.getId() ,pedido.getProdutos().stream().map(ProdutoAvaliacaoDTO::new).collect(Collectors.toList()));
+        this(pedido.getId(), pedido.getIdCliente() ,pedido.getProdutos().stream().map(ProdutoAvaliacaoDTO::new).collect(Collectors.toList()));
     }
     
 }
