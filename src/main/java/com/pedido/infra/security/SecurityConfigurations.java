@@ -30,8 +30,7 @@ public class SecurityConfigurations {
         RequestMatcher matcher3 = new AntPathRequestMatcher("/pedidos/{idPedido}/confirmado", HttpMethod.PATCH.name());
         RequestMatcher matcher4 = new AntPathRequestMatcher("/pedidos/{idPedido}", HttpMethod.DELETE.name());
 
-        req.requestMatchers(matcher).hasRole("LOJA");
-        req.requestMatchers(matcher).hasRole("CLIENTE");
+        req.requestMatchers(matcher).hasAnyRole("LOJA", "CLIENTE");
         req.requestMatchers(matcher2).hasRole("CLIENTE");
         req.requestMatchers(matcher3).hasRole("CLIENTE");
         req.requestMatchers(matcher4).hasRole("CLIENTE");
