@@ -80,7 +80,7 @@ public class PedidoService {
         validador.validarPatch(idPedido, usuario.id());
 
         var pedido = repository.getReferenceById(idPedido);
-        var pagamentoDTO = new PagamentoInputDTO(pedido.getIdCliente(), pedido.getValorPedido(), pedido.getId());
+        var pagamentoDTO = new PagamentoInputDTO(pedido);
         rabbitTemplate.convertAndSend("pedido.concluido", pagamentoDTO);
         pedido.setStatus(Status.CONFIRMADO);
         repository.save(pedido);
