@@ -94,7 +94,9 @@ public class PedidoService {
         var pedido = repository.getReferenceById(idPedido);
         
         if (pedido.getStatus() == Status.SEPARADO | pedido.getStatus() == Status.CONFIRMADO ) {
-            rabbitTemplate.convertAndSend("pedido.cancelado-produto", new PedidoSolicitacaoInputDTO(pedido.getId(), pedido.getProdutos().stream().map(ProdutoIncompletoDTO::new).collect(Collectors.toList())));       
+            PedidoSolicitacaoInputDTO dtoPedido = new PedidoSolicitacaoInputDTO(pedido.getId(),
+                pedido.getProdutos().stream().map(ProdutoIncompletoDTO::new).collect(Collectors.toList()));
+            rabbitTemplate.convertAndSend("pedido.cancelado-produto", dtoPedido);       
         }
         if (pedido.getStatus() == Status.CONFIRMADO) {
             rabbitTemplate.convertAndSend("pedido.cancelado-pagamento", pedido.getId());
