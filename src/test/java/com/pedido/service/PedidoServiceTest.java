@@ -47,8 +47,6 @@ public class PedidoServiceTest {
     @Mock
     private ValidadorPedidos validador;
 
-
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

@@ -20,11 +20,8 @@ public class ValidarIdPedido {
     }
 
     public void validarSePedidoEDeUsuario(Long idPedido, Long idUsuario){
-        
         var pedido = repository.getReferenceById(idPedido);
         
-
-
         if (!pedido.getIdCliente().equals(idUsuario)) {
             throw new ValidacaoException("Pedido não pertence ao usuário"); 
         }
